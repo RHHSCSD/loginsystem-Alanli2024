@@ -5,9 +5,7 @@
 package loginsystem;
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.*;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+
 
 /**
  * Author: Alan Li
@@ -149,7 +147,7 @@ public class LoginSystem {
                     String password = new String(loginPasswordField.getPassword());
                     
                     //checks if user's username and password are valid for login
-                    if (isValidLogin(username, password)) {
+                    if (registrationSystem.isValidLogin(username, password)) {
                         //prints out message saying you signed in if valid input
                         JOptionPane.showMessageDialog(loginFrame, "Login successful!");
                     } else {
@@ -166,33 +164,6 @@ public class LoginSystem {
             loginFrame.setVisible(true);
     }
     
-    /**
-     * Loads user credentials from file and check if username and password match
-     * @param username, the username the user inputs in the login
-     * @param password, the password the user inputs in the login
-     * @return returns true if the password and username match, false otherwise 
-     */
-    private static boolean isValidLogin(String username, String password) {
-        
-        //loads the file where all user information is located
-        try (Scanner scanner = new Scanner(new File("storageFile.txt"))) {
-            //iterate through each line in the file
-            while (scanner.hasNextLine()) {
-                //makes the information on that line equal to variable line
-                String line = scanner.nextLine();
-                //splits the line into parts using comma as the delimiter
-                String[] parts = line.split(",");
-                //checks if the line contains exactly 5 parts and if the first part, the username matches, and if the 2 part matches the password
-                if (parts.length == 5 && parts[0].equals(username) && parts[2].equals(password)) {
-                    return true; 
-                }
-            }
-            //if the file is not found, print message
-        } catch (FileNotFoundException e) {
-            System.out.println("error in isvalidlogin method");; 
-        }
-        return false; 
-    }
 }
     
 

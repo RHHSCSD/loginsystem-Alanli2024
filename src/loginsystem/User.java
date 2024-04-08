@@ -37,8 +37,8 @@ public class User {
             password = newPassword;
             email = newEmail;
             username = newUsername;
-        }
-        
+    }
+    
     /**
      * gets the first name of the user
      * @return, returns the first name of the user
@@ -119,3 +119,4 @@ public class User {
             username = newUsername;
         }
     }
+

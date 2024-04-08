@@ -6,7 +6,6 @@ package loginsystem;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Scanner;
         
 /**
@@ -48,7 +47,7 @@ public class RegistrationSystem {
    //opens the storage file for writing
     PrintWriter pw = new PrintWriter(new FileWriter(storageFile, true));
     //writes the user data into the file
-    pw.print(newUser.getUsername() + "," + newUser.getEmail() + "," + newUser.getPassword() + "," + newUser.getFirstName() + "," + newUser.getLastName());
+    pw.println(newUser.getUsername() + "," + newUser.getEmail() + "," + newUser.getPassword() + "," + newUser.getFirstName() + "," + newUser.getLastName());
     //close printwriter
     pw.close();
     //prints out message if there's an error in newuser method
@@ -109,20 +108,20 @@ public class RegistrationSystem {
         return true;
     }
     
+    //salt used for all passwords
+    private final String SALT = "asd123@";
+    
     /**
      * Hashes the given password using MD5 algorithm with salt
      * @param password, the password to hash
      * @return, returns the hashed password and null if hashing fails
      */
     private String hashPassword(String password){
+
         try {
-            // generates a random salt
-            SecureRandom random = new SecureRandom();
-            byte[] salt = new byte[16];
-            random.nextBytes(salt);
             
             // add salt to password
-            String saltedPassword = password + new String(salt);
+            String saltedPassword = password + SALT;
             
             
             // java helper class to perform encryption
@@ -165,6 +164,7 @@ public class RegistrationSystem {
                     return false;
                 }
             }
+            //close scanner
             a.close();
         } catch (FileNotFoundException e){
             //prints message if there's error in file not found
@@ -246,6 +246,37 @@ public class RegistrationSystem {
             }
         }
         return false;
-    } 
+    }
+    
+    /**
+     * Loads user credentials from file and check if username and password match
+     * @param username, the username the user inputs in the login
+     * @param password, the password the user inputs in the login
+     * @return returns true if the password and username match, false otherwise 
+     */
+    public boolean isValidLogin(String username, String password) {
+        
+        // Hash the entered password
+        String hashedPassword = hashPassword(password);
+        
+        //loads the file where all user information is located
+        try (Scanner scanner = new Scanner(new File("storageFile.txt"))) {
+            //iterate through each line in the file
+            while (scanner.hasNextLine()) {
+                //makes the information on that line equal to variable line
+                String line = scanner.nextLine();
+                //splits the line into parts using comma as the delimiter
+                String[] parts = line.split(",");
+                //checks if the line contains exactly 5 parts and if the first part, the username matches, and if the 2 part matches the password
+                if (parts.length == 5 && parts[0].equals(username) && parts[2].equals(hashedPassword)) {
+                    return true; 
+                }
+            }
+            //if the file is not found, print message
+        } catch (FileNotFoundException e) {
+            System.out.println("error in isvalidlogin method");; 
+        }
+        return false; 
+    }
     }
 
