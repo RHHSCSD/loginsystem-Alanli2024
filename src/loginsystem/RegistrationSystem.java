@@ -108,9 +108,6 @@ public class RegistrationSystem {
         return true;
     }
     
-    //salt used for all passwords
-    private final String SALT = "asd123@";
-    
     /**
      * Hashes the given password using MD5 algorithm with salt
      * @param password, the password to hash
@@ -119,9 +116,11 @@ public class RegistrationSystem {
     private String hashPassword(String password){
 
         try {
+            //generates random salt
+            String salt = generateRandomSalt(); 
             
             // add salt to password
-            String saltedPassword = password + SALT;
+            String saltedPassword = password + salt;
             
             
             // java helper class to perform encryption
@@ -277,6 +276,25 @@ public class RegistrationSystem {
             System.out.println("error in isvalidlogin method");; 
         }
         return false; 
+    }
+    
+    /**
+    * Generates a random salt 
+    * @return, returns the random salt as a string
+    */
+    public String generateRandomSalt(){
+        
+        //creates a stringbuilder to store the random salt
+        StringBuilder salt = new StringBuilder();
+        //loops 5 times to creates 5 random numbers to add to the string builder
+        for(int i = 0; i < 5; i++){
+            //creates a random number
+            double randomNumber = (int) Math.random() * 10;
+            //adds the randomNumber to the stringbuilder
+                salt.append(randomNumber);
+        }
+        //turns the created salt into a string
+        return salt.toString();
     }
     }
 
