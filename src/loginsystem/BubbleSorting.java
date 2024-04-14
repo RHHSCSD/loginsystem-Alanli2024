@@ -16,7 +16,6 @@ public class BubbleSorting {
      * Sorts an array of integers using the bubble sort method
      * @param array, the array of integers that's going to be sorted
      */
-    
     public static void bubbleSort(int[] array) {
         
         //sets the length of the array to n
